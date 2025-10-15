@@ -4,8 +4,7 @@ import numpy as np
 from catboost import CatBoostRegressor  # noqa: F401
 
 
-def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5
-               ) -> CatBoostRegressor:
+def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5):
     """
     Load a trained CatBoost model from file.
     If missing, create a dummy model with the correct input dimension.
@@ -33,12 +32,8 @@ def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5
             )
 
     # Create dummy model with correct feature count
-    model = CatBoostRegressor(
-        iterations=10,
-        depth=2,
-        learning_rate=0.1,
-        verbose=False
-    )
+    model = CatBoostRegressor(iterations=10, depth=2, learning_rate=0.1,
+                              verbose=False)
     X_dummy = np.random.rand(10, n_features)
     y_dummy = np.random.rand(10)
     model.fit(X_dummy, y_dummy)
@@ -59,7 +54,6 @@ def predict(sample) -> float:
     float
         Predicted numeric value.
     """
-    # Determine feature count dynamically
     n_features = len(sample)
     model = load_model(n_features=n_features)
     try:
