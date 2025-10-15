@@ -24,10 +24,18 @@ def load_model(path: str = "tuned_catboost_model.pkl") -> CatBoostRegressor:
             model = joblib.load(path)
             return model
         except Exception as e:
-            print(f"Warning: Failed to load model from {path}. Using dummy model. Error: {e}")
+            print(
+                f"Warning: Failed to load model from {path}. "
+                f"Using dummy model. Error: {e}"
+            )
 
     # Fallback dummy model for CI/testing
-    model = CatBoostRegressor(iterations=10, depth=2, learning_rate=0.1, verbose=False)
+    model = CatBoostRegressor(
+        iterations=10,
+        depth=2,
+        learning_rate=0.1,
+        verbose=False
+    )
     X_dummy = np.random.rand(10, 5)
     y_dummy = np.random.rand(10)
     model.fit(X_dummy, y_dummy)
@@ -54,7 +62,9 @@ def predict(sample) -> float:
         prediction = model.predict(sample_arr)
         return float(prediction[0])
     except Exception as e:
-        raise ValueError(f"Prediction failed: {e}") from e
+        raise ValueError(
+            f"Prediction failed: {e}"
+        ) from e
 
 
 if __name__ == "__main__":
