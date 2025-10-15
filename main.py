@@ -4,15 +4,17 @@ import numpy as np
 from catboost import CatBoostRegressor  # noqa: F401
 
 
-def load_model(path: str = "tuned_catboost_model.pkl") -> CatBoostRegressor:
+def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5) -> CatBoostRegressor:
     """
-    Load a trained CatBoost model from the specified file path.
-    If the file doesn't exist, create a dummy model for testing/CI.
+    Load a trained CatBoost model from file.
+    If missing, create a dummy model with the correct input dimension.
 
     Parameters
     ----------
     path : str
         Path to the serialized CatBoost model file.
+    n_features : int
+        Number of features expected by the model (for dummy fallback).
 
     Returns
     -------
@@ -29,14 +31,14 @@ def load_model(path: str = "tuned_catboost_model.pkl") -> CatBoostRegressor:
                 f"Using dummy model. Error: {e}"
             )
 
-    # Fallback dummy model for CI/testing
+    # Create dummy model with correct feature count
     model = CatBoostRegressor(
         iterations=10,
         depth=2,
         learning_rate=0.1,
         verbose=False
     )
-    X_dummy = np.random.rand(10, 5)
+    X_dummy = np.random.rand(10, n_features)
     y_dummy = np.random.rand(10)
     model.fit(X_dummy, y_dummy)
     return model
@@ -49,22 +51,22 @@ def predict(sample) -> float:
     Parameters
     ----------
     sample : list or np.ndarray
-        Input sample to predict. Must match the model's input dimensions.
+        Input sample to predict.
 
     Returns
     -------
     float
         Predicted numeric value.
     """
-    model = load_model()
+    # Determine feature count dynamically
+    n_features = len(sample)
+    model = load_model(n_features=n_features)
     try:
         sample_arr = np.array(sample, dtype=float).reshape(1, -1)
         prediction = model.predict(sample_arr)
         return float(prediction[0])
     except Exception as e:
-        raise ValueError(
-            f"Prediction failed: {e}"
-        ) from e
+        raise ValueError(f"Prediction failed: {e}") from e
 
 
 if __name__ == "__main__":
