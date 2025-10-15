@@ -4,7 +4,8 @@ import numpy as np
 from catboost import CatBoostRegressor  # noqa: F401
 
 
-def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5) -> CatBoostRegressor:
+def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5
+               ) -> CatBoostRegressor:
     """
     Load a trained CatBoost model from file.
     If missing, create a dummy model with the correct input dimension.
