@@ -1,4 +1,4 @@
-import pytest
+
 from main import load_model, predict
 
 
