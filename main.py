@@ -20,19 +20,18 @@ def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5):
     model : CatBoostRegressor
         Loaded or dummy-trained CatBoost model.
     """
-    from catboost import CatBoostRegressor  # imported inside function
+    from catboost import CatBoostRegressor  # Import locally to avoid unused import
 
     if os.path.exists(path):
         try:
-            model = joblib.load(path)
-            return model
-        except Exception as e:
+            return joblib.load(path)
+        except Exception as exc:
             print(
                 f"Warning: Failed to load model from {path}. "
-                f"Using dummy model. Error: {e}"
+                f"Using dummy model. Error: {exc}"
             )
 
-    # Create dummy model with correct feature count
+    # Create a dummy model with random data if file missing
     model = CatBoostRegressor(
         iterations=10, depth=2, learning_rate=0.1, verbose=False
     )
@@ -62,8 +61,8 @@ def predict(sample) -> float:
         sample_arr = np.array(sample, dtype=float).reshape(1, -1)
         prediction = model.predict(sample_arr)
         return float(prediction[0])
-    except Exception as e:
-        raise ValueError(f"Prediction failed: {e}") from e
+    except Exception as exc:
+        raise ValueError(f"Prediction failed: {exc}") from exc
 
 
 if __name__ == "__main__":
