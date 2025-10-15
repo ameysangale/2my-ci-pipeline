@@ -1,6 +1,5 @@
 import os
 import joblib
-import numpy as np
 from catboost import CatBoostRegressor
 from main import load_model, predict
 
