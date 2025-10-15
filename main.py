@@ -1,6 +1,7 @@
 import joblib
 import numpy as np
-from catboost import CatBoostRegressor
+from catboost import CatBoostRegressor  # noqa: F401
+
 
 
 def load_model(path="tuned_catboost_model.pkl"):
