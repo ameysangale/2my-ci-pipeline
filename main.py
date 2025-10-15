@@ -27,7 +27,7 @@ def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5):
             return joblib.load(path)
         except Exception as exc:
             print(
-                f"Warning: Failed to load model from {path}. "
+                f"Warning: Failed to load model from {path}.\n"
                 f"Using dummy model. Error: {exc}"
             )
 
