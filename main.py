@@ -7,28 +7,16 @@ def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5):
     """
     Load a trained CatBoost model from file.
     If missing, create a dummy model with the correct input dimension.
-
-    Parameters
-    ----------
-    path : str
-        Path to the serialized CatBoost model file.
-    n_features : int
-        Number of features expected by the model (for dummy fallback).
-
-    Returns
-    -------
-    model : CatBoostRegressor
-        Loaded or dummy-trained CatBoost model.
     """
-    from catboost import CatBoostRegressor  # Import locally to avoid unused import
+    from catboost import CatBoostRegressor  # noqa: F401
 
     if os.path.exists(path):
         try:
             return joblib.load(path)
         except Exception as exc:
             print(
-                f"Warning: Failed to load model from {path}.\n"
-                f"Using dummy model. Error: {exc}"
+                f"Warning: Failed to load model from {path}."
+                f" Using dummy model. Error: {exc}"
             )
 
     # Create a dummy model with random data if file missing
@@ -44,16 +32,6 @@ def load_model(path: str = "tuned_catboost_model.pkl", n_features: int = 5):
 def predict(sample) -> float:
     """
     Make a prediction using the loaded CatBoost model.
-
-    Parameters
-    ----------
-    sample : list or np.ndarray
-        Input sample to predict.
-
-    Returns
-    -------
-    float
-        Predicted numeric value.
     """
     n_features = len(sample)
     model = load_model(n_features=n_features)
@@ -66,7 +44,6 @@ def predict(sample) -> float:
 
 
 if __name__ == "__main__":
-    # Example usage
     test_sample = [1, 2, 3, 4, 5]
     try:
         result = predict(test_sample)
